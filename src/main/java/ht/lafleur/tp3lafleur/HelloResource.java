@@ -15,6 +15,8 @@ public class HelloResource {
     public Response hello(@PathParam("nom") String nom) {
         // Créer un message de bienvenue
         String Message = "Bonjour, " + nom + '!';
-        return Response.ok(Message).build();
+        // return Response.ok(Message).build();
+
+        return Response.serverError().build();
     }
 }

@@ -12,8 +12,9 @@ public class HelloResource {
     @GET
     @Produces("application/json")
     @Path("personnes/{nom}")
-    public String hello(@PathParam("nom") String nom) {
+    public Response hello(@PathParam("nom") String nom) {
         // Créer un message de bienvenue
-        return "Bonjour, " + nom + '!';
+        String Message = "Bonjour, " + nom + '!';
+        return Response.ok(Message).build();
     }
 }

@@ -6,6 +6,7 @@ import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.googleai.GoogleAiGeminiChatModel;
 import dev.langchain4j.service.AiServices;
+import dev.langchain4j.service.Result;
 import jakarta.enterprise.context.Dependent;
 
 import java.io.Serializable;
@@ -40,7 +41,7 @@ public class LlmClientPourGemini implements Serializable {
                 .build();
     }
 
-    public InfosTouristiques envoyerRequete(String question, int nb){
+    public Result<InfosTouristiques> envoyerRequete(String question, int nb){
         return guideTouristique.chat(question, nb);
     }
 

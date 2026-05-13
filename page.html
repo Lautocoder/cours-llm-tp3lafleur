@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide Touristique</title>
+</head>
+<body>
+
+<h1>Guide Touristique</h1>
+
+<label for="countryInput">Entrez le nom d'un pays ou d'une ville :</label>
+<input type="text" id="countryInput" placeholder="Entrez un pays">
+<br/>
+<br/>
+<label for="nbCount">Entrez le nombre d'endroits, vous voulez visiter :</label>
+<input type="number" min="2" id="nbCount" placeholder="2" value="2">
+<br/>
+<br/>
+<button onclick="getTouristInfo()">Obtenir les informations</button>
+
+<div id="result"></div>
+
+<script>
+    function getTouristInfo() {
+        // Récupérer le nom du pays depuis l'input
+        var country = document.getElementById("countryInput").value;
+        var nbCount = document.getElementById("nbCount").value;
+
+        // Vérifier si le champ est vide
+        if (country === "") {
+            alert("Veuillez entrer le nom d'un pays.");
+            return;
+        }
+
+        // Créer un objet XMLHttpRequest
+        var xhr = new XMLHttpRequest();
+
+        // Configurer la requête
+        xhr.open("GET", `http://localhost:8080/tp3lafleur-1.0-SNAPSHOT/api/guide/lieu/${country}?nb=${nbCount}`, true);
+        // http://localhost:8080/tp3lafleur-1.0-SNAPSHOT/api/guide/lieu/Jacmel
+        // Définir la fonction de rappel à appeler lors de la fin de la requête
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    // Parse JSON et afficher les informations dans la div résultat
+                    var data = JSON.parse(xhr.responseText);
+                    document.getElementById("result").innerHTML = `
+                    <h2>Informations sur ${data.guide.lieu}</h2>
+                    <p>Endroits à visiter : ${data.guide.endroitsAVisiter.join(", ")}</p>
+                    <p>Prix moyen d'un repas : ${data.guide.prixMoyenRepas}</p>
+                    <br/>
+                    <br/>
+                    <h2>Tokens Utilisés :</h2>
+                    <p>Nombre de tokens utilisés en envoie : ${data.tokenUsage.inputTokenCount}</p>
+                    <p>Nombre de tokens utilisés en Réponse : ${data.tokenUsage.outputTokenCount}</p>
+                    <p>Nombre total de tokens utilisés : ${data.tokenUsage.totalTokenCount}</p>
+                `;
+                } else {
+                    // En cas d'échec de la requête
+                    document.getElementById("result").innerHTML = "<p>Erreur lors de la récupération des informations : " + xhr.status + ".</p>";
+                }
+            }
+        };
+
+        // Envoyer la requête
+        xhr.send();
+    }
+</script>
+
+</body>
+</html>
